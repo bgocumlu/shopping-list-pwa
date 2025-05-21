@@ -11,8 +11,8 @@ import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  // Set document language to Turkish
+// Component to handle document configuration
+const DocumentConfig = () => {
   useEffect(() => {
     document.documentElement.lang = 'tr';
     
@@ -33,12 +33,17 @@ const App = () => {
     }
   }, []);
 
+  return null;
+};
+
+const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <ShoppingListProvider>
           <Toaster />
           <Sonner />
+          <DocumentConfig />
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
