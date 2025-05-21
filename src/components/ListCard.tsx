@@ -4,17 +4,24 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { ShoppingList } from '@/types';
-import { ArrowRight, Star, Clock, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Star, Clock, CheckCircle2, Trash2, MoreVertical } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface ListCardProps {
   list: ShoppingList;
   onClick: () => void;
   onFavoriteToggle: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
-const ListCard = ({ list, onClick, onFavoriteToggle }: ListCardProps) => {
+const ListCard = ({ list, onClick, onFavoriteToggle, onDelete }: ListCardProps) => {
   const { id, name, items, createdAt, isFavorite } = list;
   
   // Calculate completion stats
@@ -27,6 +34,12 @@ const ListCard = ({ list, onClick, onFavoriteToggle }: ListCardProps) => {
     e.stopPropagation();
     onFavoriteToggle(id);
   };
+  
+  // Handle delete
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onDelete(id);
+  };
 
   return (
     <Card 
@@ -36,17 +49,35 @@ const ListCard = ({ list, onClick, onFavoriteToggle }: ListCardProps) => {
       <CardContent className="p-4">
         <div className="flex justify-between items-start">
           <h3 className="text-lg font-medium truncate pr-2">{name}</h3>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className={`${isFavorite ? 'text-yellow-400' : 'text-muted-foreground'} hover:text-yellow-400 h-8 w-8`}
-            onClick={handleFavoriteToggle}
-          >
-            <Star 
-              className={`h-4 w-4 ${isFavorite ? 'fill-yellow-400' : ''}`} 
-            />
-            <span className="sr-only">Favori</span>
-          </Button>
+          
+          <div className="flex items-center gap-1">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className={`${isFavorite ? 'text-yellow-400' : 'text-muted-foreground'} hover:text-yellow-400 h-8 w-8`}
+              onClick={handleFavoriteToggle}
+            >
+              <Star 
+                className={`h-4 w-4 ${isFavorite ? 'fill-yellow-400' : ''}`} 
+              />
+              <span className="sr-only">Favori</span>
+            </Button>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => e.stopPropagation()}>
+                  <MoreVertical className="h-4 w-4" />
+                  <span className="sr-only">Daha fazla</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleDelete} className="text-destructive focus:text-destructive">
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Listeyi Sil
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">

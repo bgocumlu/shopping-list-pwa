@@ -130,7 +130,7 @@ const ListDetail = ({ list, onBack }: ListDetailProps) => {
     'other': 'Diğer'
   };
   
-  // Render item row
+  // Render item row - updated to make the whole row clickable
   const renderItemRow = (item: ShoppingItem) => (
     <div 
       key={item.id}
@@ -138,13 +138,17 @@ const ListDetail = ({ list, onBack }: ListDetailProps) => {
         ${item.isPurchased ? 'bg-muted/50' : 'bg-card'}
         ${item.isPriority && !item.isPurchased ? 'border-primary/30' : 'border-border'}
         ${item.isPriority && !item.isPurchased ? 'shadow-sm' : ''}
+        active:bg-muted/70 touch-manipulation
       `}
+      onClick={() => toggleItemPurchased(list.id, item.id)}
     >
-      <Checkbox 
-        checked={item.isPurchased}
-        onCheckedChange={() => toggleItemPurchased(list.id, item.id)}
-        className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-      />
+      <div onClick={(e) => e.stopPropagation()} className="flex items-center">
+        <Checkbox 
+          checked={item.isPurchased}
+          onCheckedChange={() => toggleItemPurchased(list.id, item.id)}
+          className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+        />
+      </div>
       
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
@@ -166,7 +170,7 @@ const ListDetail = ({ list, onBack }: ListDetailProps) => {
         </div>
       </div>
       
-      <div className="flex items-center">
+      <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
         <CategoryBadge category={item.category} className="mr-2 hidden sm:flex text-xs" />
         
         <DropdownMenu>
@@ -203,9 +207,9 @@ const ListDetail = ({ list, onBack }: ListDetailProps) => {
   
   return (
     <>
-      <div className="space-y-4 animate-fade-in">
+      <div className="space-y-4 animate-fade-in pb-20">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between sticky top-0 bg-background pt-2 pb-2 z-10">
           <Button variant="ghost" size="icon" onClick={onBack} className="h-9 w-9">
             <ArrowLeft className="h-4 w-4" />
             <span className="sr-only">Geri</span>

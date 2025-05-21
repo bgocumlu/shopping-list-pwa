@@ -31,6 +31,29 @@ const DocumentConfig = () => {
       themeColor.content = '#4CAF50';
       document.head.appendChild(themeColor);
     }
+    
+    // Add apple touch icon for iOS PWA
+    if (!document.querySelector('link[rel="apple-touch-icon"]')) {
+      const appleIcon = document.createElement('link');
+      appleIcon.rel = 'apple-touch-icon';
+      appleIcon.href = '/icons/icon-192x192.png';
+      document.head.appendChild(appleIcon);
+    }
+    
+    // Add iOS PWA specific meta tags
+    const metaTags = [
+      { name: 'apple-mobile-web-app-capable', content: 'yes' },
+      { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' }
+    ];
+    
+    metaTags.forEach(tag => {
+      if (!document.querySelector(`meta[name="${tag.name}"]`)) {
+        const meta = document.createElement('meta');
+        meta.name = tag.name;
+        meta.content = tag.content;
+        document.head.appendChild(meta);
+      }
+    });
   }, []);
 
   return null;

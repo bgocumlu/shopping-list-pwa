@@ -7,7 +7,8 @@ import {
   DialogHeader, 
   DialogTitle, 
   DialogFooter,
-  DialogClose
+  DialogClose,
+  DialogDescription
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -18,7 +19,8 @@ import {
   List as ListIcon, 
   Menu, 
   X,
-  SortAsc
+  SortAsc,
+  Trash2
 } from 'lucide-react';
 import { 
   DropdownMenu,
@@ -43,6 +45,7 @@ const Index = () => {
     viewType,
     createList,
     updateList,
+    deleteList,
     setCurrentList,
     setSortOrder,
     setFilterType,
@@ -50,6 +53,8 @@ const Index = () => {
   } = useShoppingList();
 
   const [isCreateListModalOpen, setIsCreateListModalOpen] = useState(false);
+  const [isDeleteListModalOpen, setIsDeleteListModalOpen] = useState(false);
+  const [listToDelete, setListToDelete] = useState<string | null>(null);
   const [newListName, setNewListName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -60,6 +65,21 @@ const Index = () => {
       createList(newListName.trim());
       setNewListName('');
       setIsCreateListModalOpen(false);
+    }
+  };
+
+  // Handle list delete
+  const handleDeleteList = (id: string) => {
+    setListToDelete(id);
+    setIsDeleteListModalOpen(true);
+  };
+
+  // Confirm delete list
+  const confirmDeleteList = () => {
+    if (listToDelete) {
+      deleteList(listToDelete);
+      setListToDelete(null);
+      setIsDeleteListModalOpen(false);
     }
   };
 
@@ -136,9 +156,9 @@ const Index = () => {
   }
 
   return (
-    <div className="container py-4 px-3 md:px-6 animate-fade-in">
+    <div className="container py-4 px-3 md:px-6 animate-fade-in pb-16">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 sticky top-0 bg-background pt-2 pb-2 z-10">
         <div>
           <h1 className="text-2xl font-bold">Alışveriş Listeleri</h1>
           <p className="text-muted-foreground text-sm">
@@ -148,10 +168,12 @@ const Index = () => {
         
         <Button 
           onClick={() => setIsCreateListModalOpen(true)}
-          className="shrink-0 gap-1"
+          className="shrink-0 gap-1 fixed bottom-6 right-6 shadow-lg rounded-full size-14 z-20 md:static md:shadow-none md:rounded-md md:size-auto"
+          size="icon"
+          variant="default"
         >
-          <Plus className="h-4 w-4" />
-          Yeni Liste
+          <Plus className="h-6 w-6 md:h-4 md:w-4" />
+          <span className="sr-only md:not-sr-only md:ml-1">Yeni Liste</span>
         </Button>
       </div>
       
@@ -264,11 +286,12 @@ const Index = () => {
                 list={list}
                 onClick={() => handleListClick(list)}
                 onFavoriteToggle={handleFavoriteToggle}
+                onDelete={handleDeleteList}
               />
             ) : (
               <div 
                 key={list.id}
-                className="flex items-center border rounded-lg p-3 bg-card cursor-pointer card-hover"
+                className="flex items-center border rounded-lg p-3 bg-card cursor-pointer card-hover touch-manipulation"
                 onClick={() => handleListClick(list)}
               >
                 <div className="flex-1 min-w-0">
@@ -285,26 +308,32 @@ const Index = () => {
                     {list.items.length} ürün • {list.items.filter(item => item.isPurchased).length} alındı
                   </div>
                 </div>
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  className="ml-2 h-8 w-8"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleFavoriteToggle(list.id);
-                  }}
-                >
-                  <span className={list.isFavorite ? 'text-yellow-400' : 'text-muted-foreground'}>
-                    {list.isFavorite ? '★' : '☆'}
-                  </span>
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  className="ml-2 h-8 w-8"
-                >
-                  <Menu className="h-4 w-4" />
-                </Button>
+                <div className="flex items-center">
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="ml-1 h-9 w-9"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleFavoriteToggle(list.id);
+                    }}
+                  >
+                    <span className={list.isFavorite ? 'text-yellow-400' : 'text-muted-foreground'}>
+                      {list.isFavorite ? '★' : '☆'}
+                    </span>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="ml-1 h-9 w-9 text-destructive hover:text-destructive"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteList(list.id);
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             )
           ))}
@@ -344,6 +373,30 @@ const Index = () => {
               </Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete List Confirmation Modal */}
+      <Dialog open={isDeleteListModalOpen} onOpenChange={setIsDeleteListModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Listeyi Sil</DialogTitle>
+            <DialogDescription>
+              Bu işlem geri alınamaz. Bu listeyi silmek istediğinizden emin misiniz?
+            </DialogDescription>
+          </DialogHeader>
+            
+          <DialogFooter className="mt-4">
+            <DialogClose asChild>
+              <Button variant="outline">
+                İptal
+              </Button>
+            </DialogClose>
+            <Button variant="destructive" onClick={confirmDeleteList}>
+              <Trash2 className="mr-2 h-4 w-4" />
+              Sil
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

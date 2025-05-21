@@ -7,6 +7,7 @@
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4CAF50",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
@@ -19,7 +20,44 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "apple touch icon"
     }
   ],
-  "orientation": "portrait"
+  "shortcuts": [
+    {
+      "name": "Yeni Liste",
+      "short_name": "Yeni",
+      "description": "Yeni liste oluştur",
+      "url": "/?newList=true",
+      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/homepage.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpg",
+      "platform": "narrow",
+      "label": "Ana Ekran"
+    },
+    {
+      "src": "/screenshots/list.jpg", 
+      "sizes": "1280x720",
+      "type": "image/jpg",
+      "platform": "narrow",
+      "label": "Liste Detay"
+    }
+  ],
+  "prefer_related_applications": false
 }
