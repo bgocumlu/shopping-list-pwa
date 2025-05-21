@@ -2,7 +2,7 @@
   "name": "Kolay Alışveriş",
   "short_name": "Alışveriş",
   "description": "Alışveriş listelerinizi kolayca oluşturun ve yönetin",
-  "start_url": "/",
+  "start_url": "/shopping-list-pwa/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4CAF50",
@@ -38,7 +38,7 @@
       "name": "Yeni Liste",
       "short_name": "Yeni",
       "description": "Yeni liste oluştur",
-      "url": "/?newList=true"
+      "url": "/shopping-list-pwa/?newList=true"
     }
   ],
   "prefer_related_applications": false
