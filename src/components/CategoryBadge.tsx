@@ -4,16 +4,16 @@ import { Badge } from '@/components/ui/badge';
 import { ItemCategory } from '@/types';
 
 const categoryLabels: Record<ItemCategory, string> = {
-  'produce': 'Produce',
-  'dairy': 'Dairy',
-  'bakery': 'Bakery',
-  'meat': 'Meat',
-  'frozen': 'Frozen',
-  'pantry': 'Pantry',
-  'household': 'Household',
-  'personal': 'Personal',
-  'beverages': 'Beverages',
-  'other': 'Other'
+  'produce': 'Meyve-Sebze',
+  'dairy': 'Süt Ürünleri',
+  'bakery': 'Fırın',
+  'meat': 'Et',
+  'frozen': 'Donmuş Ürünler',
+  'pantry': 'Kiler',
+  'household': 'Ev Gereçleri',
+  'personal': 'Kişisel Bakım',
+  'beverages': 'İçecekler',
+  'other': 'Diğer'
 };
 
 interface CategoryBadgeProps {
@@ -22,19 +22,14 @@ interface CategoryBadgeProps {
 }
 
 const CategoryBadge = ({ category, className = '' }: CategoryBadgeProps) => {
-  const badgeStyles = {
-    backgroundColor: `rgb(var(--background) / 0.9)`,
-    color: `var(--foreground)`,
-    border: `1px solid`,
-    borderColor: `var(--border)`,
-    borderLeftColor: `theme(colors.category.${category})`,
-    borderLeftWidth: '4px',
-  };
-
+  // Using category colors from the theme directly instead of a leftBorder style
   return (
     <Badge 
-      className={`font-medium py-1 ${className}`} 
-      style={badgeStyles}
+      className={`font-medium py-1 text-white ${className}`} 
+      style={{
+        backgroundColor: `var(--category-${category})`,
+        border: 'none'
+      }}
     >
       {categoryLabels[category]}
     </Badge>

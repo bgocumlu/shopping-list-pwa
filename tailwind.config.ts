@@ -63,18 +63,18 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-        category: {
-          produce: '#4CAF50',
-          dairy: '#42A5F5',
-          bakery: '#FF9800',
-          meat: '#EF5350',
-          frozen: '#29B6F6',
-          pantry: '#FF7043',
-          household: '#7E57C2',
-          personal: '#EC407A',
-          beverages: '#26A69A',
-          other: '#78909C'
-        }
+                category: {
+                  produce: '#4CAF50',
+                  dairy: '#42A5F5',
+                  bakery: '#FF9800',
+                  meat: '#EF5350',
+                  frozen: '#29B6F6',
+                  pantry: '#FF7043',
+                  household: '#7E57C2',
+                  personal: '#EC407A',
+                  beverages: '#26A69A',
+                  other: '#78909C'
+                }
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
