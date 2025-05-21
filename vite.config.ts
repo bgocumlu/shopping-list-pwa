@@ -4,6 +4,7 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  base: "/shopping-list-pwa/", // Set base for GitHub Pages
   server: {
     host: "::",
     port: 8080,
