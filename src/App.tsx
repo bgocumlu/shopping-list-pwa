@@ -15,6 +15,22 @@ const App = () => {
   // Set document language to Turkish
   useEffect(() => {
     document.documentElement.lang = 'tr';
+    
+    // Add viewport meta tag for PWA optimization if not present
+    if (!document.querySelector('meta[name="viewport"]')) {
+      const meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+      document.head.appendChild(meta);
+    }
+    
+    // Add theme color meta for PWA
+    if (!document.querySelector('meta[name="theme-color"]')) {
+      const themeColor = document.createElement('meta');
+      themeColor.name = 'theme-color';
+      themeColor.content = '#4CAF50';
+      document.head.appendChild(themeColor);
+    }
   }, []);
 
   return (

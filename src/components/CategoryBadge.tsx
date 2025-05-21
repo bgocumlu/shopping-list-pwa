@@ -8,7 +8,7 @@ const categoryLabels: Record<ItemCategory, string> = {
   'dairy': 'Süt Ürünleri',
   'bakery': 'Fırın',
   'meat': 'Et',
-  'frozen': 'Donmuş Ürünler',
+  'frozen': 'Donmuş Gıda',
   'pantry': 'Kiler',
   'household': 'Ev Gereçleri',
   'personal': 'Kişisel Bakım',
@@ -22,7 +22,6 @@ interface CategoryBadgeProps {
 }
 
 const CategoryBadge = ({ category, className = '' }: CategoryBadgeProps) => {
-  // Using category colors from the theme directly instead of a leftBorder style
   return (
     <Badge 
       className={`font-medium py-1 text-white ${className}`} 

@@ -51,7 +51,7 @@
     --category-meat: #EF5350;
     --category-frozen: #29B6F6;
     --category-pantry: #FF7043;
-    --category-household: #7E57C2;
+    --category-household: #AB47BC;
     --category-personal: #EC407A;
     --category-beverages: #26A69A;
     --category-other: #78909C;
@@ -102,7 +102,7 @@
     --category-meat: #EF5350;
     --category-frozen: #29B6F6;
     --category-pantry: #FF7043;
-    --category-household: #7E57C2;
+    --category-household: #AB47BC;
     --category-personal: #EC407A;
     --category-beverages: #26A69A;
     --category-other: #78909C;
@@ -116,6 +116,22 @@
 
   body {
     @apply bg-background text-foreground;
+    /* Safe area insets for mobile devices with notches */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    /* Prevent overscroll behavior */
+    overscroll-behavior: none;
+  }
+  
+  /* Improve tap targets for mobile */
+  button, a {
+    @apply focus:outline-none active:opacity-80;
+    touch-action: manipulation;
+  }
+  
+  /* Optimize for mobile touch interactions */
+  input, select, textarea {
+    @apply text-base md:text-sm;
+    font-size: 16px; /* Prevents iOS zoom on focus */
   }
 }
 
@@ -126,5 +142,35 @@
 
   .focus-ring {
     @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1;
+  }
+  
+  /* Mobile optimized container */
+  .container {
+    @apply px-3 md:px-6 max-w-5xl mx-auto;
+  }
+  
+  /* Bottom safe area for fixed elements */
+  .safe-bottom {
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* Optimize scrolling */
+@supports (-webkit-touch-callout: none) {
+  /* iOS specific */
+  .momentum-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: 15px; /* Slightly smaller base font size for mobile */
+  }
+  
+  /* Improve touch targets on mobile */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
   }
 }

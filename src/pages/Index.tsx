@@ -126,7 +126,7 @@ const Index = () => {
   // If a list is selected, show its details
   if (currentList) {
     return (
-      <div className="container max-w-3xl py-6 px-4 md:px-6">
+      <div className="container max-w-3xl py-4 px-3 md:px-6">
         <ListDetail 
           list={currentList} 
           onBack={() => setCurrentList(null)} 
@@ -136,13 +136,13 @@ const Index = () => {
   }
 
   return (
-    <div className="container py-6 px-4 md:px-6 animate-fade-in">
+    <div className="container py-4 px-3 md:px-6 animate-fade-in">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
         <div>
-          <h1 className="text-3xl font-bold">Shopping Lists</h1>
-          <p className="text-muted-foreground">
-            Manage your shopping lists and never forget an item
+          <h1 className="text-2xl font-bold">Alışveriş Listeleri</h1>
+          <p className="text-muted-foreground text-sm">
+            Listelerinizi düzenleyin ve hiçbir ürünü unutmayın
           </p>
         </div>
         
@@ -151,55 +151,55 @@ const Index = () => {
           className="shrink-0 gap-1"
         >
           <Plus className="h-4 w-4" />
-          New List
+          Yeni Liste
         </Button>
       </div>
       
       {/* Search and Filters */}
-      <div className="mb-6 space-y-4">
+      <div className="mb-4 space-y-3">
         <SearchBar 
           onSearch={setSearchQuery}
-          placeholder="Search lists..." 
+          placeholder="Liste ara..." 
           className="w-full"
         />
         
         <div className="flex flex-wrap items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-1">
-                <ListFilter className="h-4 w-4" />
-                {filterType === 'all' ? 'All Lists' : 
-                 filterType === 'pending' ? 'Pending Items' : 'Priority Items'}
+              <Button variant="outline" size="sm" className="gap-1 text-xs">
+                <ListFilter className="h-3.5 w-3.5" />
+                {filterType === 'all' ? 'Tüm Listeler' : 
+                 filterType === 'pending' ? 'Bekleyen Ürünler' : 'Öncelikli Ürünler'}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuLabel>Filter by</DropdownMenuLabel>
+              <DropdownMenuLabel>Filtrele</DropdownMenuLabel>
               <DropdownMenuItem onClick={() => setFilterType('all')}>
-                {filterType === 'all' && '✓ '}All Lists
+                {filterType === 'all' && '✓ '}Tüm Listeler
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setFilterType('pending')}>
-                {filterType === 'pending' && '✓ '}Lists with Pending Items
+                {filterType === 'pending' && '✓ '}Bekleyen Ürünler
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setFilterType('priority')}>
-                {filterType === 'priority' && '✓ '}Lists with Priority Items
+                {filterType === 'priority' && '✓ '}Öncelikli Ürünler
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-1">
-                <SortAsc className="h-4 w-4" />
-                {sortOrder === 'date' ? 'Recent First' : 'Alphabetical'}
+              <Button variant="outline" size="sm" className="gap-1 text-xs">
+                <SortAsc className="h-3.5 w-3.5" />
+                {sortOrder === 'date' ? 'Yeniden Eskiye' : 'Alfabetik'}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+              <DropdownMenuLabel>Sırala</DropdownMenuLabel>
               <DropdownMenuItem onClick={() => setSortOrder('date')}>
-                {sortOrder === 'date' && '✓ '}Recent First
+                {sortOrder === 'date' && '✓ '}Yeniden Eskiye
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setSortOrder('alphabetical')}>
-                {sortOrder === 'alphabetical' && '✓ '}Alphabetical
+                {sortOrder === 'alphabetical' && '✓ '}Alfabetik
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -207,18 +207,18 @@ const Index = () => {
           <Button 
             variant="outline" 
             size="sm" 
-            className="gap-1"
+            className="gap-1 text-xs"
             onClick={() => setViewType(viewType === 'grid' ? 'list' : 'grid')}
           >
             {viewType === 'grid' ? (
               <>
-                <ListIcon className="h-4 w-4" />
-                List View
+                <ListIcon className="h-3.5 w-3.5" />
+                Liste Görünümü
               </>
             ) : (
               <>
-                <Grid className="h-4 w-4" />
-                Grid View
+                <Grid className="h-3.5 w-3.5" />
+                Kart Görünümü
               </>
             )}
           </Button>
@@ -227,11 +227,11 @@ const Index = () => {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="gap-1 ml-auto"
+              className="gap-1 ml-auto text-xs"
               onClick={resetFilters}
             >
-              <X className="h-4 w-4" />
-              Clear Filters
+              <X className="h-3.5 w-3.5" />
+              Filtreleri Temizle
             </Button>
           )}
         </div>
@@ -239,23 +239,23 @@ const Index = () => {
       
       {/* Lists */}
       {filteredAndSortedLists.length === 0 ? (
-        <div className="text-center py-12">
-          <h2 className="text-xl font-medium mb-2">No shopping lists found</h2>
-          <p className="text-muted-foreground mb-6">
+        <div className="text-center py-8">
+          <h2 className="text-lg font-medium mb-2">Alışveriş listesi bulunamadı</h2>
+          <p className="text-muted-foreground mb-6 text-sm">
             {searchQuery || filterType !== 'all' 
-              ? 'Try changing your search or filters'
-              : 'Create your first shopping list to get started'}
+              ? 'Arama kriterlerinizi değiştirmeyi deneyin'
+              : 'Başlamak için ilk alışveriş listenizi oluşturun'}
           </p>
           <Button onClick={() => setIsCreateListModalOpen(true)}>
             <Plus className="mr-1 h-4 w-4" />
-            Create a List
+            Liste Oluştur
           </Button>
         </div>
       ) : (
         <div className={`
           ${viewType === 'grid' 
-            ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4' 
-            : 'space-y-3'}
+            ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3' 
+            : 'space-y-2'}
         `}>
           {filteredAndSortedLists.map(list => (
             viewType === 'grid' ? (
@@ -268,7 +268,7 @@ const Index = () => {
             ) : (
               <div 
                 key={list.id}
-                className="flex items-center border rounded-lg p-4 bg-card cursor-pointer card-hover"
+                className="flex items-center border rounded-lg p-3 bg-card cursor-pointer card-hover"
                 onClick={() => handleListClick(list)}
               >
                 <div className="flex-1 min-w-0">
@@ -276,19 +276,19 @@ const Index = () => {
                     <h3 className="font-medium truncate">{list.name}</h3>
                     {list.isFavorite && (
                       <span className="text-yellow-400">
-                        <span className="sr-only">Favorite</span>
+                        <span className="sr-only">Favorilerde</span>
                         ★
                       </span>
                     )}
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    {list.items.length} items • {list.items.filter(item => item.isPurchased).length} purchased
+                  <div className="text-xs text-muted-foreground">
+                    {list.items.length} ürün • {list.items.filter(item => item.isPurchased).length} alındı
                   </div>
                 </div>
                 <Button 
                   variant="ghost" 
                   size="icon"
-                  className="ml-2"
+                  className="ml-2 h-8 w-8"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleFavoriteToggle(list.id);
@@ -301,7 +301,7 @@ const Index = () => {
                 <Button 
                   variant="ghost" 
                   size="icon"
-                  className="ml-2"
+                  className="ml-2 h-8 w-8"
                 >
                   <Menu className="h-4 w-4" />
                 </Button>
@@ -316,19 +316,19 @@ const Index = () => {
         <DialogContent>
           <form onSubmit={handleCreateList}>
             <DialogHeader>
-              <DialogTitle>Create New List</DialogTitle>
+              <DialogTitle>Yeni Liste Oluştur</DialogTitle>
             </DialogHeader>
             
             <div className="py-4">
               <Label htmlFor="list-name" className="text-right">
-                List Name
+                Liste Adı
               </Label>
               <Input
                 id="list-name"
                 value={newListName}
                 onChange={(e) => setNewListName(e.target.value)}
                 className="mt-1"
-                placeholder="e.g., Weekly Groceries"
+                placeholder="Örn: Haftalık Alışveriş"
                 autoFocus
               />
             </div>
@@ -336,11 +336,11 @@ const Index = () => {
             <DialogFooter>
               <DialogClose asChild>
                 <Button type="button" variant="outline">
-                  Cancel
+                  İptal
                 </Button>
               </DialogClose>
               <Button type="submit" disabled={!newListName.trim()}>
-                Create List
+                Oluştur
               </Button>
             </DialogFooter>
           </form>

@@ -28,6 +28,7 @@ import AddItemModal from './AddItemModal';
 import CategoryBadge from './CategoryBadge';
 import SearchBar from './SearchBar';
 import { formatDistanceToNow } from 'date-fns';
+import { tr } from 'date-fns/locale';
 import { useShoppingList } from '@/context/ShoppingListContext';
 
 interface ListDetailProps {
@@ -115,6 +116,20 @@ const ListDetail = ({ list, onBack }: ListDetailProps) => {
     return Array.from(categories);
   }, [list.items]);
   
+  // Category labels in Turkish
+  const categoryLabels: Record<ItemCategory, string> = {
+    'produce': 'Meyve-Sebze',
+    'dairy': 'Süt Ürünleri',
+    'bakery': 'Fırın',
+    'meat': 'Et',
+    'frozen': 'Donmuş Gıda',
+    'pantry': 'Kiler',
+    'household': 'Ev Gereçleri',
+    'personal': 'Kişisel Bakım',
+    'beverages': 'İçecekler',
+    'other': 'Diğer'
+  };
+  
   // Render item row
   const renderItemRow = (item: ShoppingItem) => (
     <div 
@@ -137,48 +152,48 @@ const ListDetail = ({ list, onBack }: ListDetailProps) => {
             {item.name}
           </span>
           {item.isPriority && !item.isPurchased && (
-            <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+            <Star className="h-3.5 w-3.5 text-yellow-400 fill-yellow-400" />
           )}
         </div>
         
-        <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
           <span>
             {item.quantity} {item.unit === 'custom' ? item.customUnit : item.unit}
           </span>
           {item.notes && (
-            <span className="truncate max-w-[200px]">• {item.notes}</span>
+            <span className="truncate max-w-[150px]">• {item.notes}</span>
           )}
         </div>
       </div>
       
       <div className="flex items-center">
-        <CategoryBadge category={item.category} className="mr-2 hidden sm:flex" />
+        <CategoryBadge category={item.category} className="mr-2 hidden sm:flex text-xs" />
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <MoreVertical className="h-4 w-4" />
-              <span className="sr-only">Open menu</span>
+            <Button variant="ghost" size="icon" className="h-7 w-7">
+              <MoreVertical className="h-3.5 w-3.5" />
+              <span className="sr-only">Menüyü aç</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuLabel>İşlemler</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => handleEditItem(item)}>
-              <Pencil className="mr-2 h-4 w-4" />
-              Edit item
+              <Pencil className="mr-2 h-3.5 w-3.5" />
+              Düzenle
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => toggleItemPurchased(list.id, item.id)}>
-              <CheckCircle2 className="mr-2 h-4 w-4" />
-              Mark as {item.isPurchased ? 'unpurchased' : 'purchased'}
+              <CheckCircle2 className="mr-2 h-3.5 w-3.5" />
+              {item.isPurchased ? 'Alınmadı olarak işaretle' : 'Alındı olarak işaretle'}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem 
               className="text-destructive focus:text-destructive"
               onClick={() => deleteItem(list.id, item.id)}
             >
-              <Trash2 className="mr-2 h-4 w-4" />
-              Delete item
+              <Trash2 className="mr-2 h-3.5 w-3.5" />
+              Sil
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -188,49 +203,49 @@ const ListDetail = ({ list, onBack }: ListDetailProps) => {
   
   return (
     <>
-      <div className="space-y-6 animate-fade-in">
+      <div className="space-y-4 animate-fade-in">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <Button variant="ghost" size="icon" onClick={onBack}>
-            <ArrowLeft className="h-5 w-5" />
-            <span className="sr-only">Back</span>
+          <Button variant="ghost" size="icon" onClick={onBack} className="h-9 w-9">
+            <ArrowLeft className="h-4 w-4" />
+            <span className="sr-only">Geri</span>
           </Button>
           
           <div className="flex items-center gap-2">
             <Button 
               variant="ghost" 
               size="icon" 
-              className={`${list.isFavorite ? 'text-yellow-400' : 'text-muted-foreground'} hover:text-yellow-400`}
+              className={`${list.isFavorite ? 'text-yellow-400' : 'text-muted-foreground'} hover:text-yellow-400 h-9 w-9`}
               onClick={handleFavoriteToggle}
             >
               <Star 
-                className={`h-5 w-5 ${list.isFavorite ? 'fill-yellow-400' : ''}`} 
+                className={`h-4 w-4 ${list.isFavorite ? 'fill-yellow-400' : ''}`} 
               />
-              <span className="sr-only">Toggle favorite</span>
+              <span className="sr-only">Favori</span>
             </Button>
             
             <Button 
               variant="default" 
               size="sm" 
-              className="gap-1"
+              className="gap-1 text-xs"
               onClick={() => setIsAddItemModalOpen(true)}
             >
-              <Plus className="h-4 w-4" />
-              Add Item
+              <Plus className="h-3.5 w-3.5" />
+              Ürün Ekle
             </Button>
           </div>
         </div>
         
         {/* List Title and Info */}
         <div>
-          <h1 className="text-2xl font-bold">{list.name}</h1>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-            <span>Created {formatDistanceToNow(new Date(list.createdAt), { addSuffix: true })}</span>
+          <h1 className="text-xl font-bold">{list.name}</h1>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+            <span>{formatDistanceToNow(new Date(list.createdAt), { addSuffix: true, locale: tr })}</span>
             <span>•</span>
-            <span>{purchasedItems} of {totalItems} purchased</span>
+            <span>{purchasedItems} / {totalItems} alındı</span>
           </div>
           
-          <div className="h-1.5 bg-muted rounded-full mt-4 overflow-hidden">
+          <div className="h-1.5 bg-muted rounded-full mt-3 overflow-hidden">
             <div 
               className="h-full bg-primary transition-all duration-300"
               style={{ width: `${progress}%` }}
@@ -239,24 +254,24 @@ const ListDetail = ({ list, onBack }: ListDetailProps) => {
         </div>
         
         {/* Search and filters */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           <SearchBar 
             onSearch={setSearchQuery}
-            placeholder="Search items..." 
+            placeholder="Ürün ara..." 
           />
           
           <div className="flex flex-wrap gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-1">
-                  <Filter className="h-4 w-4" />
-                  Filter
+                <Button variant="outline" size="sm" className="gap-1 text-xs">
+                  <Filter className="h-3.5 w-3.5" />
+                  Filtrele
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuLabel>Category</DropdownMenuLabel>
+                <DropdownMenuLabel>Kategori</DropdownMenuLabel>
                 <DropdownMenuItem onClick={() => setCategoryFilter('all')}>
-                  {categoryFilter === 'all' && '✓ '}All categories
+                  {categoryFilter === 'all' && '✓ '}Tüm kategoriler
                 </DropdownMenuItem>
                 
                 {availableCategories.map(category => (
@@ -265,34 +280,34 @@ const ListDetail = ({ list, onBack }: ListDetailProps) => {
                     onClick={() => setCategoryFilter(category)}
                   >
                     {categoryFilter === category && '✓ '}
-                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                    {categoryLabels[category]}
                   </DropdownMenuItem>
                 ))}
                 
                 <DropdownMenuSeparator />
-                <DropdownMenuLabel>Status</DropdownMenuLabel>
+                <DropdownMenuLabel>Durum</DropdownMenuLabel>
                 <DropdownMenuItem onClick={() => setShowPurchased(!showPurchased)}>
-                  {showPurchased ? '✓ ' : ''}Show purchased items
+                  {showPurchased ? '✓ ' : ''}Alınanları göster
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-1">
-                  <SortAsc className="h-4 w-4" />
-                  Sort
+                <Button variant="outline" size="sm" className="gap-1 text-xs">
+                  <SortAsc className="h-3.5 w-3.5" />
+                  Sırala
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem onClick={() => setSortBy('category')}>
-                  {sortBy === 'category' && '✓ '}By Category
+                  {sortBy === 'category' && '✓ '}Kategoriye Göre
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setSortBy('name')}>
-                  {sortBy === 'name' && '✓ '}By Name
+                  {sortBy === 'name' && '✓ '}İsme Göre
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setSortBy('priority')}>
-                  {sortBy === 'priority' && '✓ '}By Priority
+                  {sortBy === 'priority' && '✓ '}Önceliğe Göre
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -300,10 +315,10 @@ const ListDetail = ({ list, onBack }: ListDetailProps) => {
             {categoryFilter !== 'all' && (
               <Badge 
                 variant="outline" 
-                className="gap-1 cursor-pointer"
+                className="gap-1 cursor-pointer text-xs"
                 onClick={() => setCategoryFilter('all')}
               >
-                {categoryFilter.charAt(0).toUpperCase() + categoryFilter.slice(1)}
+                {categoryLabels[categoryFilter]}
                 <span className="ml-1">×</span>
               </Badge>
             )}
@@ -311,10 +326,10 @@ const ListDetail = ({ list, onBack }: ListDetailProps) => {
             {!showPurchased && (
               <Badge 
                 variant="outline" 
-                className="gap-1 cursor-pointer"
+                className="gap-1 cursor-pointer text-xs"
                 onClick={() => setShowPurchased(true)}
               >
-                Hide purchased
+                Alınanları gizle
                 <span className="ml-1">×</span>
               </Badge>
             )}
@@ -323,27 +338,27 @@ const ListDetail = ({ list, onBack }: ListDetailProps) => {
         
         {/* Items List */}
         {sortedItems.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-muted-foreground">
+          <div className="text-center py-6">
+            <p className="text-muted-foreground text-sm">
               {searchQuery || categoryFilter !== 'all' || !showPurchased 
-                ? 'No items match your filters'
-                : 'No items in this list yet'}
+                ? 'Filtrelerinizle eşleşen ürün bulunamadı'
+                : 'Bu listede henüz ürün yok'}
             </p>
             <Button 
               variant="outline" 
-              className="mt-4"
+              className="mt-4 text-xs"
               onClick={() => setIsAddItemModalOpen(true)}
             >
-              <Plus className="mr-1 h-4 w-4" />
-              Add your first item
+              <Plus className="mr-1 h-3.5 w-3.5" />
+              İlk ürününüzü ekleyin
             </Button>
           </div>
         ) : sortBy === 'category' && groupedItems ? (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {Object.entries(groupedItems).map(([category, items]) => (
               <div key={category} className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <CategoryBadge category={category as ItemCategory} />
+                  <CategoryBadge category={category as ItemCategory} className="text-xs" />
                   <Separator className="flex-1" />
                 </div>
                 

@@ -46,28 +46,28 @@ const initialFormData: FormData = {
 };
 
 const categories: { value: ItemCategory; label: string }[] = [
-  { value: 'produce', label: 'Produce' },
-  { value: 'dairy', label: 'Dairy' },
-  { value: 'bakery', label: 'Bakery' },
-  { value: 'meat', label: 'Meat' },
-  { value: 'frozen', label: 'Frozen' },
-  { value: 'pantry', label: 'Pantry' },
-  { value: 'household', label: 'Household' },
-  { value: 'personal', label: 'Personal' },
-  { value: 'beverages', label: 'Beverages' },
-  { value: 'other', label: 'Other' },
+  { value: 'produce', label: 'Meyve-Sebze' },
+  { value: 'dairy', label: 'Süt Ürünleri' },
+  { value: 'bakery', label: 'Fırın' },
+  { value: 'meat', label: 'Et' },
+  { value: 'frozen', label: 'Donmuş Gıda' },
+  { value: 'pantry', label: 'Kiler' },
+  { value: 'household', label: 'Ev Gereçleri' },
+  { value: 'personal', label: 'Kişisel Bakım' },
+  { value: 'beverages', label: 'İçecekler' },
+  { value: 'other', label: 'Diğer' },
 ];
 
 const units: { value: ItemUnit; label: string }[] = [
-  { value: 'count', label: 'Count' },
-  { value: 'kg', label: 'Kilograms (kg)' },
-  { value: 'g', label: 'Grams (g)' },
-  { value: 'lb', label: 'Pounds (lb)' },
-  { value: 'oz', label: 'Ounces (oz)' },
-  { value: 'liter', label: 'Liters (L)' },
-  { value: 'ml', label: 'Milliliters (ml)' },
-  { value: 'pack', label: 'Pack' },
-  { value: 'custom', label: 'Custom' },
+  { value: 'count', label: 'Adet' },
+  { value: 'kg', label: 'Kilogram (kg)' },
+  { value: 'g', label: 'Gram (g)' },
+  { value: 'lb', label: 'Libre (lb)' },
+  { value: 'oz', label: 'Ons (oz)' },
+  { value: 'liter', label: 'Litre (L)' },
+  { value: 'ml', label: 'Mililitre (ml)' },
+  { value: 'pack', label: 'Paket' },
+  { value: 'custom', label: 'Özel' },
 ];
 
 const AddItemModal = ({ open, onOpenChange, listId, editItem }: AddItemModalProps) => {
@@ -134,31 +134,31 @@ const AddItemModal = ({ open, onOpenChange, listId, editItem }: AddItemModalProp
       <DialogContent className="sm:max-w-[500px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{editItem ? 'Edit Item' : 'Add New Item'}</DialogTitle>
+            <DialogTitle>{editItem ? 'Ürünü Düzenle' : 'Yeni Ürün Ekle'}</DialogTitle>
           </DialogHeader>
           
-          <div className="grid gap-6 py-4">
+          <div className="grid gap-4 py-4">
             {/* Item Name */}
             <div className="grid gap-2">
               <Label htmlFor="name" className="font-medium">
-                Item Name <span className="text-destructive">*</span>
+                Ürün Adı <span className="text-destructive">*</span>
               </Label>
               <Input
                 id="name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="Enter item name"
+                placeholder="Ürün adı girin"
                 required
                 autoFocus
               />
             </div>
             
             {/* Quantity and Unit */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               <div className="grid gap-2">
                 <Label htmlFor="quantity" className="font-medium">
-                  Quantity
+                  Miktar
                 </Label>
                 <Input
                   id="quantity"
@@ -173,18 +173,18 @@ const AddItemModal = ({ open, onOpenChange, listId, editItem }: AddItemModalProp
               
               <div className="grid gap-2">
                 <Label htmlFor="unit" className="font-medium">
-                  Unit
+                  Birim
                 </Label>
                 <Select 
                   value={formData.unit} 
                   onValueChange={handleUnitChange}
                 >
                   <SelectTrigger id="unit">
-                    <SelectValue placeholder="Select unit" />
+                    <SelectValue placeholder="Birim seçin" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectLabel>Units</SelectLabel>
+                      <SelectLabel>Birimler</SelectLabel>
                       {units.map((unit) => (
                         <SelectItem key={unit.value} value={unit.value}>
                           {unit.label}
@@ -200,7 +200,7 @@ const AddItemModal = ({ open, onOpenChange, listId, editItem }: AddItemModalProp
                     name="customUnit"
                     value={formData.customUnit || ''}
                     onChange={handleChange}
-                    placeholder="Enter custom unit"
+                    placeholder="Özel birim girin"
                   />
                 )}
               </div>
@@ -209,18 +209,18 @@ const AddItemModal = ({ open, onOpenChange, listId, editItem }: AddItemModalProp
             {/* Category */}
             <div className="grid gap-2">
               <Label htmlFor="category" className="font-medium">
-                Category
+                Kategori
               </Label>
               <Select 
                 value={formData.category} 
                 onValueChange={(value) => setFormData(prev => ({ ...prev, category: value as ItemCategory }))}
               >
                 <SelectTrigger id="category">
-                  <SelectValue placeholder="Select category" />
+                  <SelectValue placeholder="Kategori seçin" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectLabel>Categories</SelectLabel>
+                    <SelectLabel>Kategoriler</SelectLabel>
                     {categories.map((category) => (
                       <SelectItem key={category.value} value={category.value}>
                         {category.label}
@@ -234,7 +234,7 @@ const AddItemModal = ({ open, onOpenChange, listId, editItem }: AddItemModalProp
             {/* Price (Optional) */}
             <div className="grid gap-2">
               <Label htmlFor="price" className="font-medium">
-                Price (Optional)
+                Fiyat (İsteğe Bağlı)
               </Label>
               <Input
                 id="price"
@@ -251,14 +251,14 @@ const AddItemModal = ({ open, onOpenChange, listId, editItem }: AddItemModalProp
             {/* Notes */}
             <div className="grid gap-2">
               <Label htmlFor="notes" className="font-medium">
-                Notes (Optional)
+                Notlar (İsteğe Bağlı)
               </Label>
               <Textarea
                 id="notes"
                 name="notes"
                 value={formData.notes || ''}
                 onChange={handleChange}
-                placeholder="Add any additional notes here..."
+                placeholder="Ek notlarınızı buraya ekleyin..."
                 className="resize-none"
                 rows={3}
               />
@@ -267,7 +267,7 @@ const AddItemModal = ({ open, onOpenChange, listId, editItem }: AddItemModalProp
             {/* Priority Toggle */}
             <div className="flex items-center justify-between">
               <Label htmlFor="priority" className="font-medium">
-                Mark as Priority
+                Öncelikli Olarak İşaretle
               </Label>
               <Switch
                 id="priority"
@@ -280,11 +280,11 @@ const AddItemModal = ({ open, onOpenChange, listId, editItem }: AddItemModalProp
           <DialogFooter className="gap-2">
             <DialogClose asChild>
               <Button type="button" variant="outline">
-                Cancel
+                İptal
               </Button>
             </DialogClose>
             <Button type="submit">
-              {editItem ? 'Save Changes' : 'Add Item'}
+              {editItem ? 'Kaydet' : 'Ekle'}
             </Button>
           </DialogFooter>
         </form>
