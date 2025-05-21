@@ -235,7 +235,7 @@ const ListDetail = ({ list, onBack, onDelete }: ListDetailProps) => {
               <span className="sr-only">Favori</span>
             </Button>
             
-            <DropdownMenu>
+            {/* <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="h-9 w-9 p-0">
                   <MoreVertical className="h-4 w-4" />
@@ -251,7 +251,7 @@ const ListDetail = ({ list, onBack, onDelete }: ListDetailProps) => {
                   Listeyi Sil
                 </DropdownMenuItem>
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> */}
             
             <Button 
               variant="default" 

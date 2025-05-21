@@ -156,9 +156,9 @@ const Index = () => {
   }
 
   return (
-    <div className="container py-4 px-3 md:px-6 animate-fade-in pb-16">
+    <div className="container py-4 px-3 md:px-6 pb-16">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 sticky top-0 bg-background pt-2 pb-2 z-10">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 top-0 bg-background pt-2 pb-2 z-10">
         <div>
           <h1 className="text-2xl font-bold">Alışveriş Listeleri</h1>
           <p className="text-muted-foreground text-sm">
@@ -172,8 +172,8 @@ const Index = () => {
           size="icon"
           variant="default"
         >
-          <Plus className="h-6 w-6 md:h-4 md:w-4" />
-          <span className="sr-only md:not-sr-only md:ml-1">Yeni Liste</span>
+          <Plus className="h-6 w-6 md:h-4 md:w-4 md:ml-1" />
+          <span className="sr-only md:not-sr-only md:m-1.5">Yeni Liste</span>
         </Button>
       </div>
       

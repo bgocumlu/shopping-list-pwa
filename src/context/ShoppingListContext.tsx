@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { 
@@ -178,8 +177,8 @@ export const ShoppingListProvider: React.FC<{ children: React.ReactNode }> = ({ 
       setCurrentListState(list);
     } else {
       toast({
-        title: "List not found",
-        description: "The selected list could not be found.",
+        title: "Liste bulunamadı",
+        description: "Seçilen liste bulunamadı.",
         variant: "destructive"
       });
     }
@@ -198,8 +197,8 @@ export const ShoppingListProvider: React.FC<{ children: React.ReactNode }> = ({ 
     
     setLists(prev => [...prev, newList]);
     toast({
-      title: "List created",
-      description: `"${name}" has been created successfully.`
+      title: "Liste oluşturuldu",
+      description: `"${name}" başarıyla oluşturuldu.`
     });
     
     return newList;
@@ -225,8 +224,8 @@ export const ShoppingListProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
     
     toast({
-      title: "List deleted",
-      description: "The shopping list has been deleted."
+      title: "Liste silindi",
+      description: "Alışveriş listesi silindi."
     });
   };
 
