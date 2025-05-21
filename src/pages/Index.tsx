@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
@@ -150,6 +149,7 @@ const Index = () => {
         <ListDetail 
           list={currentList} 
           onBack={() => setCurrentList(null)} 
+          onDelete={handleDeleteList}
         />
       </div>
     );

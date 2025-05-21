@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -34,9 +33,10 @@ import { useShoppingList } from '@/context/ShoppingListContext';
 interface ListDetailProps {
   list: ShoppingList;
   onBack: () => void;
+  onDelete?: (id: string) => void;
 }
 
-const ListDetail = ({ list, onBack }: ListDetailProps) => {
+const ListDetail = ({ list, onBack, onDelete }: ListDetailProps) => {
   const { updateList, toggleItemPurchased, deleteItem } = useShoppingList();
   
   const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
@@ -107,6 +107,13 @@ const ListDetail = ({ list, onBack }: ListDetailProps) => {
   const handleEditItem = (item: ShoppingItem) => {
     setEditingItem(item);
     setIsAddItemModalOpen(true);
+  };
+  
+  // Handle delete list
+  const handleDeleteList = () => {
+    if (onDelete) {
+      onDelete(list.id);
+    }
   };
   
   // Available categories for filtering
@@ -227,6 +234,24 @@ const ListDetail = ({ list, onBack }: ListDetailProps) => {
               />
               <span className="sr-only">Favori</span>
             </Button>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="h-9 w-9 p-0">
+                  <MoreVertical className="h-4 w-4" />
+                  <span className="sr-only">Daha fazla</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem 
+                  className="text-destructive focus:text-destructive"
+                  onClick={handleDeleteList}
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Listeyi Sil
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             
             <Button 
               variant="default" 
