@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Dialog, 
   DialogContent, 
@@ -88,6 +87,18 @@ const AddItemModal = ({ open, onOpenChange, listId, editItem }: AddItemModalProp
     }
     onOpenChange(open);
   };
+
+  useEffect(() => {
+    if (open) {
+      if (editItem) {
+        setFormData(editItem);
+        setShowCustomUnit(editItem.unit === 'custom');
+      } else {
+        setFormData(initialFormData);
+        setShowCustomUnit(false);
+      }
+    }
+  }, [open, editItem]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
