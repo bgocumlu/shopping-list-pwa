@@ -428,27 +428,25 @@ const Index = () => {  const {
               <div className="flex items-center gap-2">
                 <Separator className="flex-1" />
                 <span className="text-xs text-muted-foreground">veya</span>
-                <Separator className="flex-1" />
-              </div>
-              
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={() => {
-                  setIsCreateListModalOpen(false);
-                  setIsImportModalOpen(true);
-                }}
-                className="w-full gap-2"
-              >
-                <Download className="h-4 w-4" />
-                Mevcut Liste İçe Aktar
-              </Button>
+                <Separator className="flex-1" />              </div>
             </div>            <DialogFooter>
               <DialogClose asChild>
                 <Button type="button" variant="outline">
                   İptal
                 </Button>
               </DialogClose>
+              <Button 
+                type="button" 
+                variant="secondary" 
+                onClick={() => {
+                  setIsCreateListModalOpen(false);
+                  setIsImportModalOpen(true);
+                }}
+                className="gap-2"
+              >
+                <Download className="h-4 w-4" />
+                İçe Aktar
+              </Button>
               <Button type="submit" disabled={!newListName.trim()}>
                 Oluştur
               </Button>
