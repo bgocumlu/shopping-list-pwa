@@ -269,13 +269,17 @@ const ImportModal = ({ open, onOpenChange, onImport }: ImportModalProps) => {
                   {previewList.items.length > 0 && (
                     <div className="space-y-1">
                       <p className="text-xs font-medium">Ürünler:</p>
-                      <div className="max-h-24 overflow-y-auto space-y-1">
-                        {previewList.items.slice(0, 5).map((item, index) => (
-                          <div key={index} className="flex items-center gap-2 text-xs">
+                      <div className="max-h-24 overflow-y-auto space-y-1">                        {previewList.items.slice(0, 5).map((item, index) => (
+                          <div key={index} className="flex items-center justify-between gap-2 text-xs">
                             <span className={item.isPurchased ? 'line-through text-muted-foreground' : ''}>
                               {item.quantity} {item.unit === 'custom' ? item.customUnit : item.unit} {item.name}
                             </span>
-                            {item.isPriority && <span className="text-yellow-600">⭐</span>}
+                            <div className="flex items-center gap-1">
+                              {item.price && (
+                                <span className="text-green-600 font-medium">₺{item.price.toFixed(2)}</span>
+                              )}
+                              {item.isPriority && <span className="text-yellow-600">⭐</span>}
+                            </div>
                           </div>
                         ))}
                         {previewList.items.length > 5 && (

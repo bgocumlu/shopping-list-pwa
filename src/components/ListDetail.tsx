@@ -48,11 +48,15 @@ const ListDetail = ({ list, onBack, onDelete, onShare }: ListDetailProps) => {
   const [showPurchased, setShowPurchased] = useState(true);
   const [sortBy, setSortBy] = useState<'category' | 'priority' | 'name'>('category');
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  
-  // Calculate stats
+    // Calculate stats
   const totalItems = list.items.length;
   const purchasedItems = list.items.filter(item => item.isPurchased).length;
   const progress = totalItems > 0 ? Math.round((purchasedItems / totalItems) * 100) : 0;
+  
+  // Calculate total price
+  const totalPrice = list.items.reduce((sum, item) => sum + (item.price || 0), 0);
+  const purchasedPrice = list.items.filter(item => item.isPurchased).reduce((sum, item) => sum + (item.price || 0), 0);
+  const remainingPrice = totalPrice - purchasedPrice;
   
   // Filter and sort items
   const filteredItems = useMemo(() => {
@@ -172,11 +176,13 @@ const ListDetail = ({ list, onBack, onDelete, onShare }: ListDetailProps) => {
             <Star className="h-3.5 w-3.5 text-yellow-400 fill-yellow-400" />
           )}
         </div>
-        
-        <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
           <span>
             {item.quantity} {item.unit === 'custom' ? item.customUnit : item.unit}
           </span>
+          {item.price && (
+            <span className="text-green-600 font-medium">• ₺{item.price.toFixed(2)}</span>
+          )}
           {item.notes && (
             <span className="truncate max-w-[150px]">• {item.notes}</span>
           )}
@@ -277,14 +283,25 @@ const ListDetail = ({ list, onBack, onDelete, onShare }: ListDetailProps) => {
             </Button>
           </div>
         </div>
-        
-        {/* List Title and Info */}
+          {/* List Title and Info */}
         <div>
           <h1 className="text-xl font-bold">{list.name}</h1>
           <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
             <span>{formatDistanceToNow(new Date(list.createdAt), { addSuffix: true, locale: tr })}</span>
             <span>•</span>
             <span>{purchasedItems} / {totalItems} alındı</span>
+            {totalPrice > 0 && (
+              <>
+                <span>•</span>
+                <span className="text-green-600 font-medium">₺{totalPrice.toFixed(2)} toplam</span>
+                {remainingPrice > 0 && (
+                  <>
+                    <span>•</span>
+                    <span className="text-orange-600">₺{remainingPrice.toFixed(2)} kalan</span>
+                  </>
+                )}
+              </>
+            )}
           </div>
           
           <div className="h-1.5 bg-muted rounded-full mt-3 overflow-hidden">

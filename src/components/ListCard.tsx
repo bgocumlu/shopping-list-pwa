@@ -37,12 +37,15 @@ const ListCard = ({
   onShare,
 }: ListCardProps) => {
   const { id, name, items, createdAt, isFavorite } = list;
-
   // Calculate completion stats
   const totalItems = items.length;
   const purchasedItems = items.filter((item) => item.isPurchased).length;
   const progress =
     totalItems > 0 ? Math.round((purchasedItems / totalItems) * 100) : 0;
+
+  // Calculate total price
+  const totalPrice = items.reduce((sum, item) => sum + (item.price || 0), 0);
+  const purchasedPrice = items.filter(item => item.isPurchased).reduce((sum, item) => sum + (item.price || 0), 0);
 
   // Handle favorite toggle
   const handleFavoriteToggle = (e: React.MouseEvent) => {
@@ -123,17 +126,20 @@ const ListCard = ({
             <span>%{progress}</span>
           </div>
           <Progress value={progress} className="h-1.5" />
-        </div>
-
-        <div className="mt-3 flex items-center gap-2">
-          <CheckCircle2 className="h-3.5 w-3.5 text-muted-foreground" />
-          <span className="text-xs">
-            {totalItems === 0
-              ? "Henüz ürün yok"
-              : purchasedItems === totalItems
-              ? "Tüm ürünler alındı"
-              : `${totalItems - purchasedItems} ürün kaldı`}
-          </span>
+        </div>        <div className="mt-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="text-xs">
+              {totalItems === 0
+                ? "Henüz ürün yok"
+                : purchasedItems === totalItems
+                ? "Tüm ürünler alındı"
+                : `${totalItems - purchasedItems} ürün kaldı`}
+            </span>
+          </div>
+          {totalPrice > 0 && (
+            <span className="text-xs font-medium text-green-600">₺{totalPrice.toFixed(2)}</span>
+          )}
         </div>
       </CardContent>
       <CardFooter className="bg-muted p-2">
