@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import { 
   Plus, 
   ListFilter, 
@@ -403,26 +404,46 @@ const Index = () => {  const {
       {/* Create List Modal */}
       <Dialog open={isCreateListModalOpen} onOpenChange={setIsCreateListModalOpen}>
         <DialogContent>
-          <form onSubmit={handleCreateList}>
-            <DialogHeader>
+          <form onSubmit={handleCreateList}>            <DialogHeader>
               <DialogTitle>Yeni Liste Oluştur</DialogTitle>
+              <DialogDescription>
+                Yeni bir alışveriş listesi oluşturun veya mevcut bir listeyi içe aktarın
+              </DialogDescription>
             </DialogHeader>
-            
-            <div className="py-4">
-              <Label htmlFor="list-name" className="text-right">
-                Liste Adı
-              </Label>
-              <Input
-                id="list-name"
-                value={newListName}
-                onChange={(e) => setNewListName(e.target.value)}
-                className="mt-1"
-                placeholder="Örn: Haftalık Alışveriş"
-                autoFocus
-              />
-            </div>
-            
-            <DialogFooter>
+              <div className="py-4 space-y-4">
+              <div>
+                <Label htmlFor="list-name" className="text-right">
+                  Liste Adı
+                </Label>
+                <Input
+                  id="list-name"
+                  value={newListName}
+                  onChange={(e) => setNewListName(e.target.value)}
+                  className="mt-1"
+                  placeholder="Örn: Haftalık Alışveriş"
+                  autoFocus
+                />
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <Separator className="flex-1" />
+                <span className="text-xs text-muted-foreground">veya</span>
+                <Separator className="flex-1" />
+              </div>
+              
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={() => {
+                  setIsCreateListModalOpen(false);
+                  setIsImportModalOpen(true);
+                }}
+                className="w-full gap-2"
+              >
+                <Download className="h-4 w-4" />
+                Mevcut Liste İçe Aktar
+              </Button>
+            </div>            <DialogFooter>
               <DialogClose asChild>
                 <Button type="button" variant="outline">
                   İptal
