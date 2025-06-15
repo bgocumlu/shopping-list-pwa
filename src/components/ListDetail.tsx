@@ -314,10 +314,10 @@ const ListDetail = ({ list, onBack, onDelete, onShare }: ListDetailProps) => {
         
         {/* Search and filters */}
         <div className="space-y-3">
-          <SearchBar 
+          {/* <SearchBar 
             onSearch={setSearchQuery}
             placeholder="Ürün ara..." 
-          />
+          /> */}
           
           <div className="flex flex-wrap gap-2">
             <DropdownMenu>
