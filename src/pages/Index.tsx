@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
   Dialog, 
@@ -19,7 +19,9 @@ import {
   Menu, 
   X,
   SortAsc,
-  Trash2
+  Trash2,
+  Share2,
+  Download
 } from 'lucide-react';
 import { 
   DropdownMenu,
@@ -32,11 +34,14 @@ import {
 import ListCard from '@/components/ListCard';
 import ListDetail from '@/components/ListDetail';
 import SearchBar from '@/components/SearchBar';
+import ShareModal from '@/components/ShareModal';
+import ImportModal from '@/components/ImportModal';
 import { ShoppingList, ListViewType, SortOrder, ListFilterType } from '@/types';
 import { useShoppingList } from '@/context/ShoppingListContext';
+import { extractSharedListFromUrl } from '@/lib/shareUtils';
+import { toast } from '@/components/ui/use-toast';
 
-const Index = () => {
-  const {
+const Index = () => {  const {
     lists,
     currentList,
     sortOrder,
@@ -46,16 +51,60 @@ const Index = () => {
     updateList,
     deleteList,
     setCurrentList,
+    addItem,
     setSortOrder,
     setFilterType,
     setViewType
-  } = useShoppingList();
-
-  const [isCreateListModalOpen, setIsCreateListModalOpen] = useState(false);
+  } = useShoppingList();const [isCreateListModalOpen, setIsCreateListModalOpen] = useState(false);
   const [isDeleteListModalOpen, setIsDeleteListModalOpen] = useState(false);
   const [listToDelete, setListToDelete] = useState<string | null>(null);
   const [newListName, setNewListName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [listToShare, setListToShare] = useState<ShoppingList | null>(null);
+
+  // Check for shared list in URL on component mount
+  useEffect(() => {
+    const sharedList = extractSharedListFromUrl();
+    if (sharedList) {
+      setIsImportModalOpen(true);
+      // Clear the URL parameter after detection
+      const url = new URL(window.location.href);
+      url.searchParams.delete('share');
+      window.history.replaceState({}, '', url.toString());
+    }
+  }, []);
+  // Handle import of shared list
+  const handleImportList = (importedList: ShoppingList) => {
+    const newList = createList(importedList.name);
+    
+    // Add all items to the newly created list
+    importedList.items.forEach(item => {
+      addItem(newList.id, {
+        name: item.name,
+        quantity: item.quantity,
+        unit: item.unit,
+        category: item.category,
+        notes: item.notes,
+        price: item.price,
+        isPriority: item.isPriority,
+        isPurchased: item.isPurchased,
+        customUnit: item.customUnit
+      });
+    });
+    
+    // Update list properties if needed
+    if (importedList.isFavorite) {
+      updateList(newList.id, { isFavorite: true });
+    }
+  };
+
+  // Handle share list
+  const handleShareList = (list: ShoppingList) => {
+    setListToShare(list);
+    setIsShareModalOpen(true);
+  };
 
   // Handle list create submission
   const handleCreateList = (e: React.FormEvent) => {
@@ -140,15 +189,17 @@ const Index = () => {
   const resetFilters = () => {
     setFilterType('all');
     setSearchQuery('');
-  };
-
-  // If a list is selected, show its details
+  };  // If a list is selected, show its details
   if (currentList) {
     return (
-      <div className="container max-w-3xl py-4 px-3 md:px-6">
-        <ListDetail 
+      <div className="container max-w-3xl py-4 px-3 md:px-6">        <ListDetail 
           list={currentList} 
-          onBack={() => setCurrentList(null)} 
+          onBack={() => {
+            setCurrentList(null);
+            // Clear any pending share state when going back
+            setListToShare(null);
+            setIsShareModalOpen(false);
+          }} 
           onDelete={handleDeleteList}
         />
       </div>
@@ -244,6 +295,15 @@ const Index = () => {
               </>
             )}
           </Button>
+            <Button 
+            variant="outline" 
+            size="sm" 
+            className="gap-1 text-xs"
+            onClick={() => setIsImportModalOpen(true)}
+          >
+            <Download className="h-3.5 w-3.5" />
+            İçe Aktar
+          </Button>
           
           {(filterType !== 'all' || searchQuery) && (
             <Button 
@@ -280,13 +340,13 @@ const Index = () => {
             : 'space-y-2'}
         `}>
           {filteredAndSortedLists.map(list => (
-            viewType === 'grid' ? (
-              <ListCard 
+            viewType === 'grid' ? (              <ListCard 
                 key={list.id}
                 list={list}
                 onClick={() => handleListClick(list)}
                 onFavoriteToggle={handleFavoriteToggle}
                 onDelete={handleDeleteList}
+                onShare={handleShareList}
               />
             ) : (
               <div 
@@ -398,7 +458,26 @@ const Index = () => {
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
+      </Dialog>      {/* Share List Modal */}
+      {listToShare && (
+        <ShareModal 
+          open={isShareModalOpen} 
+          onOpenChange={(open) => {
+            setIsShareModalOpen(open);
+            if (!open) {
+              setListToShare(null); // Clear the list when modal is closed
+            }
+          }} 
+          list={listToShare}
+        />
+      )}
+      
+      {/* Import List Modal */}
+      <ImportModal 
+        open={isImportModalOpen} 
+        onOpenChange={setIsImportModalOpen} 
+        onImport={handleImportList}
+      />
     </div>
   );
 };

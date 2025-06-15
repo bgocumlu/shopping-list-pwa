@@ -13,7 +13,8 @@ import {
   MoreVertical,
   CheckCircle2,
   Filter,
-  SortAsc
+  SortAsc,
+  Share2
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -26,6 +27,7 @@ import {
 import AddItemModal from './AddItemModal';
 import CategoryBadge from './CategoryBadge';
 import SearchBar from './SearchBar';
+import ShareModal from './ShareModal';
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { useShoppingList } from '@/context/ShoppingListContext';
@@ -34,17 +36,18 @@ interface ListDetailProps {
   list: ShoppingList;
   onBack: () => void;
   onDelete?: (id: string) => void;
+  onShare?: (list: ShoppingList) => void;
 }
 
-const ListDetail = ({ list, onBack, onDelete }: ListDetailProps) => {
+const ListDetail = ({ list, onBack, onDelete, onShare }: ListDetailProps) => {
   const { updateList, toggleItemPurchased, deleteItem } = useShoppingList();
-  
-  const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
+    const [isAddItemModalOpen, setIsAddItemModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ShoppingItem | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<ItemCategory | 'all'>('all');
   const [showPurchased, setShowPurchased] = useState(true);
   const [sortBy, setSortBy] = useState<'category' | 'priority' | 'name'>('category');
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   
   // Calculate stats
   const totalItems = list.items.length;
@@ -108,12 +111,15 @@ const ListDetail = ({ list, onBack, onDelete }: ListDetailProps) => {
     setEditingItem(item);
     setIsAddItemModalOpen(true);
   };
-  
-  // Handle delete list
+    // Handle delete list
   const handleDeleteList = () => {
     if (onDelete) {
       onDelete(list.id);
     }
+  };
+    // Handle share list
+  const handleShareList = () => {
+    setIsShareModalOpen(true);
   };
   
   // Available categories for filtering
@@ -222,8 +228,7 @@ const ListDetail = ({ list, onBack, onDelete }: ListDetailProps) => {
             <span className="sr-only">Geri</span>
           </Button>
           
-          <div className="flex items-center gap-2">
-            <Button 
+          <div className="flex items-center gap-2">            <Button 
               variant="ghost" 
               size="icon" 
               className={`${list.isFavorite ? 'text-yellow-400' : 'text-muted-foreground'} hover:text-yellow-400 h-9 w-9`}
@@ -233,6 +238,14 @@ const ListDetail = ({ list, onBack, onDelete }: ListDetailProps) => {
                 className={`h-4 w-4 ${list.isFavorite ? 'fill-yellow-400' : ''}`} 
               />
               <span className="sr-only">Favori</span>
+            </Button>            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-9 w-9 text-muted-foreground hover:text-primary"
+              onClick={handleShareList}
+            >
+              <Share2 className="h-4 w-4" />
+              <span className="sr-only">Paylaş</span>
             </Button>
             
             {/* <DropdownMenu>
@@ -403,12 +416,17 @@ const ListDetail = ({ list, onBack, onDelete }: ListDetailProps) => {
           </div>
         )}
       </div>
-      
-      <AddItemModal 
+        <AddItemModal 
         open={isAddItemModalOpen}
         onOpenChange={setIsAddItemModalOpen}
         listId={list.id}
         editItem={editingItem}
+      />
+      
+      <ShareModal 
+        open={isShareModalOpen}
+        onOpenChange={setIsShareModalOpen}
+        list={list}
       />
     </>
   );

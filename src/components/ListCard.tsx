@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   Trash2,
   MoreVertical,
+  Share2,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { tr } from "date-fns/locale";
@@ -25,6 +26,7 @@ interface ListCardProps {
   onClick: () => void;
   onFavoriteToggle: (id: string) => void;
   onDelete: (id: string) => void;
+  onShare?: (list: ShoppingList) => void;
 }
 
 const ListCard = ({
@@ -32,6 +34,7 @@ const ListCard = ({
   onClick,
   onFavoriteToggle,
   onDelete,
+  onShare,
 }: ListCardProps) => {
   const { id, name, items, createdAt, isFavorite } = list;
 
@@ -62,8 +65,7 @@ const ListCard = ({
         <div className="flex justify-between items-start">
           <h3 className="text-lg font-medium truncate pr-2">{name}</h3>
 
-          <div className="flex items-center gap-1">
-            <Button
+          <div className="flex items-center gap-1">            <Button
               variant="ghost"
               size="icon"
               className={`${
@@ -76,6 +78,21 @@ const ListCard = ({
               />
               <span className="sr-only">Favori</span>
             </Button>
+
+            {onShare && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-muted-foreground hover:text-primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onShare(list);
+                }}
+              >
+                <Share2 className="h-4 w-4" />
+                <span className="sr-only">Paylaş</span>
+              </Button>
+            )}
 
             <Button
               variant="ghost"
