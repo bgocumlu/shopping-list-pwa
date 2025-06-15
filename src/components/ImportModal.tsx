@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -32,13 +32,16 @@ interface ImportModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onImport: (list: ShoppingList) => void;
+  sharedListData?: string;
 }
 
-const ImportModal = ({ open, onOpenChange, onImport }: ImportModalProps) => {
+const ImportModal = ({ open, onOpenChange, onImport, sharedListData }: ImportModalProps) => {
   const [importCode, setImportCode] = useState('');
+  const [importData, setImportData] = useState('');
   const [previewList, setPreviewList] = useState<ShoppingList | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isValidating, setIsValidating] = useState(false);
+  const importButtonRef = useRef<HTMLButtonElement>(null);
 
   // Handle input change
   const handleInputChange = (value: string) => {
@@ -50,6 +53,16 @@ const ImportModal = ({ open, onOpenChange, onImport }: ImportModalProps) => {
       validateAndPreview(value.trim());
     }
   };
+
+  useEffect(() => {
+    if (!sharedListData) {
+      setImportData('');
+      setImportCode('');
+      setPreviewList(null);
+      setError(null);
+      return;
+    }
+  }, [open, sharedListData]);
 
   // Validate and preview the list
   const validateAndPreview = async (code: string) => {
@@ -67,7 +80,7 @@ const ImportModal = ({ open, onOpenChange, onImport }: ImportModalProps) => {
           list = decodeShoppingList(code);
         }
       }
-
+      
       if (list) {
         setPreviewList(list);
         setError(null);
@@ -159,11 +172,25 @@ const ImportModal = ({ open, onOpenChange, onImport }: ImportModalProps) => {
   };
 
   // Check URL on open
-  React.useEffect(() => {
-    if (open) {
-      checkUrlForSharedList();
+  useEffect(() => {
+    if (open && sharedListData) {
+      setImportData(sharedListData);
+      // Automatically trigger preview
+      try {
+        const list = decodeShoppingList(sharedListData);
+        setImportCode(sharedListData.trim());
+        setPreviewList(list);
+        setError('');
+
+        setTimeout(() => {
+          importButtonRef.current?.focus();
+        }, 100);
+      } catch (err) {
+        setError('Geçersiz paylaşım kodu');
+        setPreviewList(null);
+      }
     }
-  }, [open]);
+  }, [open, sharedListData]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -187,6 +214,7 @@ const ImportModal = ({ open, onOpenChange, onImport }: ImportModalProps) => {
               onChange={(e) => handleInputChange(e.target.value)}
               placeholder="Paylaşım kodunu veya linki buraya yapıştırın..."
               className="min-h-[100px] text-xs font-mono resize-none"
+              autoFocus={false}
             />
             {isValidating && (
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -295,6 +323,8 @@ const ImportModal = ({ open, onOpenChange, onImport }: ImportModalProps) => {
                 <Button
                   className="w-full gap-2"
                   onClick={handleImport}
+                  ref={importButtonRef}
+                  disabled={!previewList}
                 >
                   <Plus className="h-4 w-4" />
                   Listeyi İçe Aktar

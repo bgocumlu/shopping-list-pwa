@@ -161,7 +161,6 @@ const AddItemModal = ({ open, onOpenChange, listId, editItem }: AddItemModalProp
                 onChange={handleChange}
                 placeholder="Ürün adı girin"
                 required
-                autoFocus
               />
             </div>
             

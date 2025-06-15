@@ -64,11 +64,16 @@ const Index = () => {  const {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [listToShare, setListToShare] = useState<ShoppingList | null>(null);
+  const [sharedListData, setSharedListData] = useState<string>('');
 
   // Check for shared list in URL on component mount
   useEffect(() => {
     const sharedList = extractSharedListFromUrl();
     if (sharedList) {
+      // Get the share parameter directly from URL to pass to modal
+      const urlObj = new URL(window.location.href);
+      const shareParam = urlObj.searchParams.get('share');
+      setSharedListData(shareParam || '');
       setIsImportModalOpen(true);
       // Clear the URL parameter after detection
       const url = new URL(window.location.href);
@@ -300,7 +305,7 @@ const Index = () => {  const {
             variant="outline" 
             size="sm" 
             className="gap-1 text-xs"
-            onClick={() => setIsImportModalOpen(true)}
+            onClick={() => {setIsImportModalOpen(true); setSharedListData('');}}
           >
             <Download className="h-3.5 w-3.5" />
             İçe Aktar
@@ -421,7 +426,7 @@ const Index = () => {  const {
                   onChange={(e) => setNewListName(e.target.value)}
                   className="mt-1"
                   placeholder="Örn: Haftalık Alışveriş"
-                  autoFocus
+                  autoFocus={false}
                 />
               </div>
               
@@ -440,6 +445,7 @@ const Index = () => {  const {
                 variant="secondary" 
                 onClick={() => {
                   setIsCreateListModalOpen(false);
+                  setSharedListData('');
                   setIsImportModalOpen(true);
                 }}
                 className="gap-2"
@@ -492,10 +498,11 @@ const Index = () => {  const {
       )}
       
       {/* Import List Modal */}
-      <ImportModal 
-        open={isImportModalOpen} 
-        onOpenChange={setIsImportModalOpen} 
+      <ImportModal
+        open={isImportModalOpen}
+        onOpenChange={setIsImportModalOpen}
         onImport={handleImportList}
+        sharedListData={sharedListData}
       />
     </div>
   );
